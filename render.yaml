@@ -2,6 +2,8 @@ services:
   - type: web
     name: secops-mcp-api
     runtime: python
+    plan: free
+    rootDir: .
     buildCommand: pip install .
     startCommand: uvicorn server.api:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/tools
@@ -9,4 +11,14 @@ services:
       - key: CORS_ORIGINS
         sync: false
       - key: NVD_API_KEY
+        sync: false
+
+  - type: web
+    name: secops-mcp-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
         sync: false
