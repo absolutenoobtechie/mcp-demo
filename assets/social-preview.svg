@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913" />
+      <stop offset="40%" stop-color="#0b1120" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+
+    <!-- Radial Cyan Glow -->
+    <radialGradient id="cyanGlow" cx="50%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#00f2fe" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Violet Glow -->
+    <radialGradient id="violetGlow" cx="20%" cy="70%" r="45%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Emerald Glow -->
+    <radialGradient id="emeraldGlow" cx="80%" cy="70%" r="45%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Title Gradient -->
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#e0f2fe" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+
+    <linearGradient id="shieldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="50%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#00e676" />
+    </linearGradient>
+
+    <linearGradient id="shieldFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#111827" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#0b0f19" stop-opacity="0.98" />
+    </linearGradient>
+
+    <!-- Cyber Grid -->
+    <pattern id="cyberGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.8" stroke-opacity="0.4" />
+      <circle cx="40" cy="0" r="1" fill="#00f2fe" fill-opacity="0.25" />
+    </pattern>
+
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Layer -->
+  <rect width="1280" height="640" fill="url(#bgGrad)" />
+  <rect width="1280" height="640" fill="url(#cyberGrid)" />
+  <rect width="1280" height="640" fill="url(#cyanGlow)" />
+  <rect width="1280" height="640" fill="url(#violetGlow)" />
+  <rect width="1280" height="640" fill="url(#emeraldGlow)" />
+
+  <!-- Outer Border Frame -->
+  <rect x="20" y="20" width="1240" height="600" rx="16" fill="none" stroke="#1e293b" stroke-width="1.5" />
+  <line x1="20" y1="21" x2="1260" y2="21" stroke="#00f2fe" stroke-width="2" opacity="0.6" />
+
+  <!-- Central Emblem -->
+  <g transform="translate(560, 80)">
+    <!-- Shield Aura -->
+    <path d="M 80 12 
+             C 114 12, 136 25, 136 60 
+             C 136 102, 102 130, 80 141 
+             C 58 130, 24 102, 24 60 
+             C 24 25, 46 12, 80 12 Z" 
+          fill="none" 
+          stroke="url(#shieldBorder)" 
+          stroke-width="3" 
+          filter="url(#neonGlow)" 
+          opacity="0.6"/>
+
+    <!-- Shield Body -->
+    <path d="M 80 14 
+             C 112 14, 134 26, 134 60 
+             C 134 100, 100 128, 80 139 
+             C 60 128, 26 100, 26 60 
+             C 26 26, 48 14, 80 14 Z" 
+          fill="url(#shieldFill)" 
+          stroke="url(#shieldBorder)" 
+          stroke-width="2.5" />
+
+    <!-- Terminal inside Shield -->
+    <g transform="translate(42, 45)">
+      <rect width="76" height="52" rx="5" fill="#030712" stroke="#1f2937" stroke-width="1.2" />
+      <rect width="76" height="15" rx="5" fill="#1e293b" />
+      <rect y="9" width="76" height="6" fill="#1e293b" />
+      <circle cx="8" cy="7.5" r="2" fill="#ef4444" />
+      <circle cx="15" cy="7.5" r="2" fill="#f59e0b" />
+      <circle cx="22" cy="7.5" r="2" fill="#10b981" />
+      
+      <!-- Prompt >_ -->
+      <path d="M 12 28 L 20 33 L 12 38" fill="none" stroke="#00f2fe" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+      <rect x="25" y="27" width="8" height="12" rx="1.5" fill="#00e676" />
+      <rect x="38" y="32" width="26" height="2.5" rx="1" fill="#38bdf8" opacity="0.8" />
+      <rect x="12" y="43" width="36" height="2.5" rx="1" fill="#64748b" opacity="0.6" />
+    </g>
+    <circle cx="80" cy="118" r="3" fill="#00f2fe" filter="url(#neonGlow)" />
+  </g>
+
+  <!-- Content Group -->
+  <!-- Pill Tag -->
+  <g transform="translate(535, 255)">
+    <rect width="210" height="30" rx="15" fill="#0f172a" stroke="#0284c7" stroke-width="1.2" />
+    <circle cx="16" cy="15" r="4" fill="#00f2fe" filter="url(#neonGlow)" />
+    <text x="30" y="20" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5">DEFENSIVE MCP SERVER</text>
+  </g>
+
+  <!-- Big Title -->
+  <text x="640" y="355" text-anchor="middle" fill="url(#titleGrad)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="64" font-weight="800" letter-spacing="-1">
+    SecOps MCP
+  </text>
+
+  <!-- Subtitle / Tagline -->
+  <text x="640" y="410" text-anchor="middle" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" letter-spacing="0.2">
+    Defensive Security Tooling &amp; Incident Intelligence for AI Agents
+  </text>
+
+  <!-- Feature Tags Group -->
+  <g transform="translate(260, 470)">
+    <!-- Pill 1: Secret Scan -->
+    <g transform="translate(0, 0)">
+      <rect width="170" height="38" rx="19" fill="#0f172a" stroke="#1e293b" stroke-width="1.2" />
+      <circle cx="20" cy="19" r="4" fill="#ef4444" />
+      <text x="34" y="24" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600">Secret Scanning</text>
+    </g>
+    <!-- Pill 2: CVE Lookup -->
+    <g transform="translate(185, 0)">
+      <rect width="180" height="38" rx="19" fill="#0f172a" stroke="#1e293b" stroke-width="1.2" />
+      <circle cx="20" cy="19" r="4" fill="#38bdf8" />
+      <text x="34" y="24" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600">NVD CVE Lookup</text>
+    </g>
+    <!-- Pill 3: Auth Logs -->
+    <g transform="translate(380, 0)">
+      <rect width="180" height="38" rx="19" fill="#0f172a" stroke="#1e293b" stroke-width="1.2" />
+      <circle cx="20" cy="19" r="4" fill="#f59e0b" />
+      <text x="34" y="24" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600">Log Analysis</text>
+    </g>
+    <!-- Pill 4: Breach Check -->
+    <g transform="translate(575, 0)">
+      <rect width="185" height="38" rx="19" fill="#0f172a" stroke="#1e293b" stroke-width="1.2" />
+      <circle cx="20" cy="19" r="4" fill="#10b981" />
+      <text x="34" y="24" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600">HIBP Breach Check</text>
+    </g>
+  </g>
+
+  <!-- Bottom Details -->
+  <text x="640" y="565" text-anchor="middle" fill="#64748b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace" font-size="14" font-weight="500">
+    FastMCP • Python 3.11+ • FastAPI • React • Vite • Tailwind • Zero Secrets Stored
+  </text>
+</svg>
