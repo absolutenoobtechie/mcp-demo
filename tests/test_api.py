@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+import server.api as api_module
 from server.api import app
 
 client = TestClient(app)
@@ -67,3 +68,12 @@ def test_api_sets_localhost_cors_header() -> None:
     response = client.get("/api/tools", headers={"Origin": "http://localhost:5173"})
 
     assert response.headers["access-control-allow-origin"] == "http://localhost:5173"
+
+
+def test_cors_origins_include_configured_deployment(monkeypatch) -> None:
+    monkeypatch.setenv("CORS_ORIGINS", "https://console.example.com/")
+
+    assert api_module._cors_origins() == [
+        "http://localhost:5173",
+        "https://console.example.com",
+    ]

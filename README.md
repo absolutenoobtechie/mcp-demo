@@ -71,6 +71,27 @@ Invoke-RestMethod -Method Post `
 
 See [API.md](API.md) for every endpoint, request, response, and example.
 
+## Deploy with Render and Vercel
+
+The repository includes [`render.yaml`](render.yaml) for the FastAPI backend
+and [`frontend/vercel.json`](frontend/vercel.json) for the Vite dashboard.
+
+1. Create a Render Web Service from this repository using the `render.yaml`
+   blueprint. Render runs `uvicorn server.api:app` and exposes `/api/tools` as
+   its health check.
+2. Copy the deployed Render URL, for example
+   `https://secops-mcp-api.example.onrender.com`.
+3. Create a Vercel project from this repository and set its Root Directory to
+   `frontend`.
+4. Add the Vercel environment variable `VITE_API_URL` with the Render URL,
+   then deploy.
+5. In Render, set `CORS_ORIGINS` to the deployed Vercel origin, such as
+   `https://secops-console.example.vercel.app`. Localhost remains allowed for
+   development.
+
+Keep `NVD_API_KEY` optional and configure it only as a server-side Render
+environment variable. Never put it in the Vercel project or frontend code.
+
 ## Connect from Claude Desktop or Cursor
 
 Add the following MCP server entry to the client configuration. Replace the

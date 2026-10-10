@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: secops-mcp-api
+    runtime: python
+    buildCommand: pip install .
+    startCommand: uvicorn server.api:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/tools
+    envVars:
+      - key: CORS_ORIGINS
+        sync: false
+      - key: NVD_API_KEY
+        sync: false

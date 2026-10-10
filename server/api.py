@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 from typing import Any, Callable
 
 from fastapi import Body, FastAPI, HTTPException
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, ValidationError
+from dotenv import load_dotenv
 
 from server.tools import (
     analyze_auth_log,
@@ -19,6 +21,19 @@ from server.tools import (
     score_url,
     search_cves,
 )
+
+load_dotenv()
+
+
+def _cors_origins() -> list[str]:
+    configured = os.getenv("CORS_ORIGINS", "")
+    origins = ["http://localhost:5173"]
+    origins.extend(
+        origin.strip().rstrip("/")
+        for origin in configured.split(",")
+        if origin.strip()
+    )
+    return list(dict.fromkeys(origins))
 
 
 class StrictInput(BaseModel):
@@ -91,7 +106,7 @@ TOOL_DEFINITIONS: dict[str, ToolDefinition] = {
 app = FastAPI(title="SecOps MCP API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=_cors_origins(),
     allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
