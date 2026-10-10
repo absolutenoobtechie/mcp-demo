@@ -106,3 +106,30 @@ pytest
 The tests mock all upstream HTTP calls. URL scoring is intentionally
 heuristic-only and does not fetch the supplied URL, which keeps the demo
 defensive and avoids creating an SSRF-capable fetcher.
+
+## Run the Frontend Dashboard (SecOps MCP Console)
+
+A dark cyber React + Vite + Tailwind dashboard is available in `/frontend`.
+
+### Prerequisites
+Node.js 18+ and npm.
+
+### Quick Start
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+The dashboard will start at `http://localhost:5173`.
+
+### Features
+- **Live Tool Roster**: Sidebar dynamically populated from `GET /api/tools`.
+- **Interactive Tool Panels**: Run secret scanning, CVE lookups/searches, SSH auth log analysis, password breach audits, and phishing URL scoring.
+- **1-Click Demo Samples**: Preloaded with `samples/auth.log` and `samples/dummy-secrets.txt`.
+- **Defensive Audit Trail**: Real-time session history, risk profile distribution, and JSON audit export.
+- **Dual-Mode Adapter**: Automatically connects to the live FastAPI bridge at `VITE_API_URL` (default `http://localhost:8000`) and seamlessly falls back to local simulation mode if the backend is offline.
+
+See [FRONTEND_NOTES.md](FRONTEND_NOTES.md) for architecture, notes, and assumptions.
+
