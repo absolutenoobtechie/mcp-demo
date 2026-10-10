@@ -9,6 +9,7 @@ import httpx
 
 from server.tools.breach_check import check_password_breach
 from server.tools.cve_lookup import lookup_cve, search_cves
+from server.tools.incident_report import generate_incident_report
 from server.tools.log_analyzer import analyze_auth_log
 from server.tools.secrets_scan import scan_secrets
 from server.tools.url_check import score_url
@@ -113,3 +114,38 @@ def test_score_url_is_local_and_flags_suspicious_url() -> None:
     assert "embedded_credentials" in result["details"]["flags"]
     assert "punycode_hostname" in result["details"]["flags"]
     assert result["details"]["head_check"]["performed"] is False
+
+
+def test_generate_incident_report_prioritizes_and_redacts_prior_outputs() -> None:
+    leaked_value = "sk-demo-secret-value-that-must-not-escape"
+    result = generate_incident_report(
+        [
+            {
+                "tool": "score_url",
+                "risk": "med",
+                "reason": "Detected phishing heuristics.",
+                "details": {"score": 40, "flags": ["url_shortener"]},
+            },
+            {
+                "tool": "scan_secrets",
+                "risk": "high",
+                "reason": "Found a secret-like value.",
+                "details": {
+                    "count": 1,
+                    "findings": [{"value": leaked_value}],
+                },
+            },
+            {
+                "tool": "check_password_breach",
+                "risk": "low",
+                "reason": "No breach match.",
+                "details": {"breached": False, "occurrences": 0},
+            },
+        ]
+    )
+
+    assert result["tool"] == "generate_incident_report"
+    assert result["risk"] == "high"
+    assert result["details"]["prioritized_findings"][0]["tool"] == "scan_secrets"
+    assert result["details"]["recommended_actions"]
+    assert leaked_value not in json.dumps(result)
