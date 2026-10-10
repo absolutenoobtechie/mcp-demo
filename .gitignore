@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project-specific local/demo artifacts
+**/__pycache__/
+**/*.egg-info/
+**/.pytest_cache/
+**/.env
+node_modules/
+**/node_modules/
+frontend/dist/
