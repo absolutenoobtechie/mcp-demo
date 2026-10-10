@@ -74,6 +74,7 @@ export default function App() {
   const [isMockMode, setIsMockMode] = useState(false);
   const [apiOnline, setApiOnline] = useState(false);
   const [isCheckingHealth, setIsCheckingHealth] = useState(false);
+  const [hasCheckedHealth, setHasCheckedHealth] = useState(false);
 
   // Execution state
   const [isRunning, setIsRunning] = useState(false);
@@ -103,10 +104,14 @@ export default function App() {
   // Ping backend health
   const checkHealthStatus = useCallback(async () => {
     setIsCheckingHealth(true);
-    const healthy = await pingBackend();
-    setApiOnline(healthy);
-    setIsCheckingHealth(false);
-    return healthy;
+    try {
+      const healthy = await pingBackend();
+      setApiOnline(healthy);
+      return healthy;
+    } finally {
+      setIsCheckingHealth(false);
+      setHasCheckedHealth(true);
+    }
   }, []);
 
   // Fetch tools list on startup and mode toggle
@@ -126,6 +131,10 @@ export default function App() {
 
     try {
       const response = await callTool(toolName, payload, isMockMode);
+      if (!isMockMode && response._source === "local_mock") {
+        setApiOnline(false);
+        setHasCheckedHealth(true);
+      }
       const enrichedResult = {
         ...response,
         timestamp: new Date().toISOString(),
@@ -183,6 +192,18 @@ export default function App() {
         checkHealth={checkHealthStatus}
         stats={stats}
       />
+
+      {hasCheckedHealth && !apiOnline && (
+        <div
+          role="alert"
+          className="border-b border-rose-500/70 bg-rose-950/95 px-4 py-3 text-center font-mono text-sm font-bold tracking-wide text-rose-100"
+        >
+          BACKEND OFFLINE - SIMULATED DATA
+          <span className="ml-2 font-normal text-rose-200/80">
+            Results are from the local demo adapter.
+          </span>
+        </div>
+      )}
 
       {/* Main Container */}
       <div className="flex-1 flex">

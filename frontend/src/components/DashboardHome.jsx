@@ -187,7 +187,7 @@ export default function DashboardHome({
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <Terminal className="h-5 w-5 text-cyan-400" /> Defensive Tool Suite
           </h2>
-          <span className="text-xs text-slate-400 font-mono">6 MCP Tools Connected</span>
+          <span className="text-xs text-slate-400 font-mono">{tools.length} MCP Tools Connected</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
