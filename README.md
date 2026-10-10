@@ -2,10 +2,25 @@
 
 A small, defensive-only MCP server for AI + cybersecurity demos. It provides
 secret scanning, NVD CVE lookups, authentication-log analysis, privacy-aware
-password breach checks, and local phishing URL scoring.
+password breach checks, local phishing URL scoring, and incident report
+generation from prior findings.
 
 The backend lives in `/server`. The frontend is a separate ownership area and
 is not required to run the tools.
+
+```mermaid
+flowchart LR
+  Agent[AI agent or MCP client] -->|stdio| MCP[server/main.py\nFastMCP]
+  UI[React dashboard\n/frontend] -->|HTTP JSON| API[server/api.py\nFastAPI]
+  MCP --> Tools[server/tools\npure defensive functions]
+  API --> Tools
+  Tools --> NVD[NVD API]
+  Tools --> HIBP[HIBP k-anonymity API]
+  UI -. backend unavailable .-> Mock[local demo adapter]
+```
+
+Both transports call the same pure functions. There is no database; tools keep
+no secret or password state.
 
 ## Install
 
@@ -132,4 +147,3 @@ The dashboard will start at `http://localhost:5173`.
 - **Dual-Mode Adapter**: Automatically connects to the live FastAPI bridge at `VITE_API_URL` (default `http://localhost:8000`) and seamlessly falls back to local simulation mode if the backend is offline.
 
 See [FRONTEND_NOTES.md](FRONTEND_NOTES.md) for architecture, notes, and assumptions.
-

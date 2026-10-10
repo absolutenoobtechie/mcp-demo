@@ -6,7 +6,7 @@ This document describes the design, implementation decisions, and assumptions ma
 
 ## 1. Architecture & Ownership Boundary
 
-- **Ownership strictly respected**: Only files in `/frontend`, `FRONTEND_NOTES.md`, and the frontend running section in `README.md` were created/edited. `/server`, `/tests`, `API.md`, and `AGENTS.md` were left completely untouched.
+- **Ownership boundary**: The frontend remains isolated from backend implementation details. The dashboard consumes the documented API contract and now includes the small UI changes needed to make backend availability explicit.
 - **Single API Layer**: All API communication, schema definitions, and network error handling live strictly in [`frontend/src/api.js`](file:///frontend/src/api.js). Any backend contract change touches only this file.
 - **Base URL**: Configured via `import.meta.env.VITE_API_URL` with a default of `http://localhost:8000`. In addition, runtime custom URLs can be configured directly in the console UI via the Navbar Settings modal (stored in `localStorage`).
 
@@ -37,6 +37,7 @@ The frontend strictly targets the API contract specified in `API.md`:
 4. **`analyze_auth_log(log_text)`**: Parses authentication logs, flags brute-force sources (threshold ≥ 5 failed attempts), and highlights public/odd IPs.
 5. **`check_password_breach(password)`**: Checks passwords using HIBP k-anonymity (sends only 5-character SHA-1 prefix). Passwords are never sent or logged.
 6. **`score_url(url)`**: Heuristic phishing evaluation with zero outbound fetches (SSRF-safe).
+7. **`generate_incident_report(findings)`**: Aggregates prior structured findings into an overall risk, prioritized findings, and defensive next actions.
 
 ---
 
@@ -44,7 +45,7 @@ The frontend strictly targets the API contract specified in `API.md`:
 
 1. **Backend Availability & Offline Demo Readiness**:
    - *Assumption*: During a hackathon demo or local judge evaluation, the FastAPI bridge might not be running simultaneously or upstream services (NVD rate limits, HIBP connectivity) might experience latency or rate limits.
-   - *Implementation*: `frontend/src/api.js` includes an intelligent **Dual-Mode Adapter**. It attempts live requests to `VITE_API_URL`, but if the server is unreachable or if the user clicks "Force Mock", it seamlessly executes a high-fidelity local adapter replicating the exact tool algorithms. The Navbar displays a clear status pill (`Connected: Live API` vs `Mock Adapter (Offline / Demo)`).
+   - *Implementation*: `frontend/src/api.js` includes a **Dual-Mode Adapter**. It attempts live requests to `VITE_API_URL`, but if the server is unreachable or if the user clicks "Force Mock", it executes a local demo adapter. When the health check or a live call detects an unreachable backend, the app sets `apiOnline=false` and displays the visible red banner **`BACKEND OFFLINE - SIMULATED DATA`**; simulated results are never silent. The Navbar also displays the connection state.
 
 2. **CORS Configuration**:
    - `server/api.py` allows origin `http://localhost:5173`.

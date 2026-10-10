@@ -39,7 +39,7 @@ Example response:
 }
 ```
 
-The response includes all six tools; the example is abbreviated.
+The response includes all seven tools; the example is abbreviated.
 
 ## `POST /api/scan_secrets`
 
@@ -182,6 +182,74 @@ Example response:
 
 This check intentionally performs no request to the supplied URL, which keeps
 the demo from turning URL analysis into an SSRF primitive.
+
+## `POST /api/generate_incident_report`
+
+Aggregates prior structured tool outputs into a defensive incident summary.
+The report copies only safe, aggregate signals from each finding and does not
+include raw secret matches or passwords.
+
+Request JSON:
+
+```json
+{
+  "findings": [
+    {
+      "tool": "analyze_auth_log",
+      "risk": "high",
+      "reason": "Repeated authentication failures indicate possible brute-force activity.",
+      "details": {
+        "failed_attempts": 12,
+        "brute_force_sources": ["203.0.113.44"]
+      }
+    },
+    {
+      "tool": "score_url",
+      "risk": "low",
+      "reason": "No phishing heuristics detected.",
+      "details": {"score": 0, "hostname": "example.com"}
+    }
+  ]
+}
+```
+
+Response JSON:
+
+```json
+{
+  "tool": "generate_incident_report",
+  "risk": "high",
+  "reason": "Prioritized 2 finding(s); overall risk is high.",
+  "details": {
+    "overall_risk": "high",
+    "finding_count": 2,
+    "prioritized_findings": [
+      {
+        "priority": 1,
+        "tool": "analyze_auth_log",
+        "risk": "high",
+        "reason": "Repeated authentication failures indicate possible brute-force activity.",
+        "signals": {
+          "failed_attempts": 12,
+          "brute_force_sources": ["203.0.113.44"]
+        }
+      },
+      {
+        "priority": 2,
+        "tool": "score_url",
+        "risk": "low",
+        "reason": "No phishing heuristics detected.",
+        "signals": {"score": 0, "hostname": "example.com"}
+      }
+    ],
+    "recommended_actions": [
+      "Investigate source IPs and review authentication events; apply rate limiting and MFA where appropriate.",
+      "Continue monitoring the remaining low-risk finding(s)."
+    ],
+    "ignored_inputs": 0
+  }
+}
+```
 
 ## Errors
 
