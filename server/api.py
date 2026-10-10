@@ -13,6 +13,7 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 from server.tools import (
     analyze_auth_log,
     check_password_breach,
+    generate_incident_report,
     lookup_cve,
     scan_secrets,
     score_url,
@@ -50,6 +51,10 @@ class ScoreUrlInput(StrictInput):
     url: str
 
 
+class GenerateIncidentReportInput(StrictInput):
+    findings: list[dict[str, Any]]
+
+
 @dataclass(frozen=True)
 class ToolDefinition:
     description: str
@@ -75,6 +80,11 @@ TOOL_DEFINITIONS: dict[str, ToolDefinition] = {
     ),
     "score_url": ToolDefinition(
         "Score a URL with local phishing heuristics and no content fetch.", ScoreUrlInput, score_url
+    ),
+    "generate_incident_report": ToolDefinition(
+        "Prioritize prior defensive findings and recommend response actions.",
+        GenerateIncidentReportInput,
+        generate_incident_report,
     ),
 }
 

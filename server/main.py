@@ -5,6 +5,7 @@ from mcp.server.fastmcp import FastMCP
 from server.tools import (
     analyze_auth_log,
     check_password_breach,
+    generate_incident_report,
     lookup_cve,
     scan_secrets,
     score_url,
@@ -19,6 +20,7 @@ for tool_function in (
     search_cves,
     analyze_auth_log,
     check_password_breach,
+    generate_incident_report,
     score_url,
 ):
     mcp.tool(name=tool_function.__name__)(tool_function)
